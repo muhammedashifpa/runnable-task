@@ -11,7 +11,7 @@ import {
 import { TypographyEditController } from "@/components/ui/typography-edit-controller";
 import { EditorProvider } from "@/components/editor-components/editor-provider";
 import { EditModeToggle } from "@/components/editor-components/edit-mode-toggle";
-import UserApp from "@/components/user-components/canvas";
+import UserApp from "@/components/user-components/user-app";
 import EditorPreview from "@/components/editor-components/editor-preview";
 
 export default function Page() {
@@ -20,8 +20,8 @@ export default function Page() {
       <SidebarProvider>
         <AppSidebar className="z-9999" />
         <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
-            <div className="flex items-center">
+          <header className="flex h-16 shrink-0 items-center bg-white sticky top-0 justify-between gap-2 border-b px-4">
+            <div className="flex items-center relative">
               <SidebarTrigger className="-ml-1" />
               <Separator
                 orientation="vertical"

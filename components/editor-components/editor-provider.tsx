@@ -7,6 +7,8 @@ interface EditorContextType {
   setSelectedId: (id: string | null) => void;
   editableMode: boolean;
   toggleEditableMode: () => void;
+  activeElement: HTMLElement | null;
+  setActiveElement: (element: HTMLElement | null) => void;
 }
 
 const EditorContext = createContext<EditorContextType | null>(null);
@@ -15,11 +17,22 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [editableMode, setEditableMode] = useState(true);
 
-  const toggleEditableMode = () => setEditableMode((prev) => !prev);
+  const [activeElement, setActiveElement] = useState<HTMLElement | null>(null);
 
+  const toggleEditableMode = () => {
+    setEditableMode((prev) => !prev);
+    setActiveElement(null);
+  };
   return (
     <EditorContext.Provider
-      value={{ selectedId, setSelectedId, editableMode, toggleEditableMode }}
+      value={{
+        selectedId,
+        setSelectedId,
+        editableMode,
+        toggleEditableMode,
+        activeElement,
+        setActiveElement,
+      }}
     >
       {children}
     </EditorContext.Provider>
