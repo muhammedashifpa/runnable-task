@@ -9,12 +9,14 @@ const TYPO_CLASSES = {
   textAlign: /^text-(left|center|right|justify)$/,
   textDecoration: /^(underline|line-through|overline|no-underline)$/,
   fontStyle: /^(italic|not-italic)$/,
+  color:
+    /^text-(?:[a-z]+(?:-[a-z]+)?-\d{1,3}|black|white|transparent|current)(?:\/\d{1,3})?$/,
 };
 
 export function useTypography(el: HTMLElement | null) {
   const [classes, setClasses] = useState<string[]>([]);
   const [textClasses, setTextClasses] = useState<string[]>([]);
-  const { updateBoundingClients } = useEditor();
+  const { updateBoundingClients, elementType } = useEditor();
 
   // Extract all classes when element changes
   useEffect(() => {
@@ -42,9 +44,7 @@ export function useTypography(el: HTMLElement | null) {
 
   // Utility: remove previous typography class before adding new one
   function updateTypography(type: keyof typeof TYPO_CLASSES, newClass: string) {
-    console.log("updating typography", type, newClass);
     if (!el) return;
-    console.log(el.classList, "updating typography classes");
     const regex = TYPO_CLASSES[type];
 
     // Remove existing relevant class
@@ -91,8 +91,14 @@ export function useTypography(el: HTMLElement | null) {
     );
   }, [el, textClasses]);
 
+  const currentFontColor = useMemo(() => {
+    return (
+      textClasses.find((cls) => cls.match(TYPO_CLASSES.color)) || "text-inherit"
+    );
+  }, [el, textClasses]);
+
   const showTextAlignControls = React.useMemo(() => {
-    if (!el || !el.parentElement) return true;
+    if (!el || !el.parentElement || elementType === "text") return true;
 
     const parent = el.parentElement;
     const parentClasses = parent.className.split(" ");
@@ -112,12 +118,14 @@ export function useTypography(el: HTMLElement | null) {
     currentWeight,
     currentAlign,
     currentFontSize,
+    currentFontColor,
     // Setters
     setFontSize: (size: string) => updateTypography("fontSize", size),
     setFontWeight: (weight: string) => updateTypography("fontWeight", weight),
     setLineHeight: (lh: string) => updateTypography("leading", lh),
     setTracking: (tracking: string) => updateTypography("tracking", tracking),
     setTextAlign: (align: string) => updateTypography("textAlign", align),
+    setFontColor: (color: string) => updateTypography("color", color),
 
     // Raw update in case you add custom rules later
     updateTypography,

@@ -27,6 +27,8 @@ export function getElementType(el: HTMLElement): ElementType {
       "h5",
       "h6",
       "a",
+      "dt",
+      "dd",
     ].includes(tag)
   )
     return "text";

@@ -1,19 +1,16 @@
 import { useState, useEffect, RefObject } from "react";
 
-import { lockedType } from "@/components/types";
-
 export function useElementTracker<T extends HTMLElement>(
-  ref: RefObject<HTMLDivElement | null>,
+  userAppAreaRef: RefObject<HTMLDivElement | null>,
   editableMode: boolean,
   setActiveElement: (el: HTMLElement | null) => void
 ) {
   const [liveSelected, setLiveSelected] = useState<HTMLElement | null>(null);
-  const [locked, setLocked] = useState<lockedType | null>(null);
 
   useEffect(() => {
-    if (!editableMode || !ref.current) return;
+    if (!editableMode || !userAppAreaRef.current) return;
 
-    const node = ref.current;
+    const node = userAppAreaRef.current;
 
     const handleClick = (e: MouseEvent) => {
       e.preventDefault();
@@ -21,15 +18,28 @@ export function useElementTracker<T extends HTMLElement>(
 
       const el = e.target as HTMLElement;
       setActiveElement(el);
-      // const rect = structuredClone(el.getBoundingClientRect());
+    };
+    const handleDoubleClick = (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-      // setLocked({
-      //   top: rect.top + window.scrollY,
-      //   left: rect.left + window.scrollX,
-      //   width: rect.width,
-      //   height: rect.height,
-      //   tagName: el.tagName.toLowerCase(),
-      // });
+      const el = e.target as HTMLElement;
+
+      // Enable content editable
+      el.setAttribute("contenteditable", "true");
+      el.focus();
+
+      // Disable on blur
+      const handleBlur = () => {
+        el.removeAttribute("contenteditable");
+        el.removeEventListener("blur", handleBlur);
+      };
+      // Allow focusing immediately
+      el.setAttribute("tabindex", "-1");
+
+      // Focus
+      el.focus();
+      el.addEventListener("blur", handleBlur);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -43,15 +53,17 @@ export function useElementTracker<T extends HTMLElement>(
     };
 
     node.addEventListener("click", handleClick);
+    node.addEventListener("dblclick", handleDoubleClick);
     node.addEventListener("mouseover", handleMouseOver);
     node.addEventListener("mouseout", handleMouseOut);
 
     return () => {
       node.removeEventListener("click", handleClick);
+      node.removeEventListener("dblclick", handleDoubleClick);
       node.removeEventListener("mouseover", handleMouseOver);
       node.removeEventListener("mouseout", handleMouseOut);
     };
-  }, [editableMode, ref]);
+  }, [editableMode, userAppAreaRef]);
 
-  return { liveSelected, locked };
+  return { liveSelected };
 }

@@ -22,6 +22,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useTypography } from "@/hooks/use-typography";
 import { Toggle } from "../ui/toggle";
+import { Label } from "../ui/label";
 interface TypographyEditControllerProps {
   activeElement: HTMLElement | null;
 }
@@ -53,16 +54,55 @@ const FONT_SIZE_LABELS: Record<string, string> = {
   "text-9xl": "9xl",
 };
 
-export function TypographyEditController({
+const COLORS: { label: string; value: string }[] = [
+  { label: "Default", value: "text-inherit" },
+  { label: "Black", value: "text-black" },
+  { label: "White", value: "text-white" },
+
+  { label: "Slate", value: "text-slate-500" },
+  { label: "Gray", value: "text-gray-500" },
+  { label: "Gray 600", value: "text-gray-600" },
+  { label: "Gray 700", value: "text-gray-700" },
+  { label: "Gray 800", value: "text-gray-800" },
+  { label: "Gray 900", value: "text-gray-900" },
+
+  { label: "Zinc", value: "text-zinc-500" },
+  { label: "Neutral", value: "text-neutral-500" },
+  { label: "Stone", value: "text-stone-500" },
+
+  { label: "Red", value: "text-red-500" },
+  { label: "Orange", value: "text-orange-500" },
+  { label: "Amber", value: "text-amber-500" },
+  { label: "Yellow", value: "text-yellow-500" },
+
+  { label: "Lime", value: "text-lime-500" },
+  { label: "Green", value: "text-green-500" },
+  { label: "Emerald", value: "text-emerald-500" },
+
+  { label: "Teal", value: "text-teal-500" },
+  { label: "Cyan", value: "text-cyan-500" },
+  { label: "Sky", value: "text-sky-500" },
+
+  { label: "Blue", value: "text-blue-500" },
+  { label: "Indigo", value: "text-indigo-500" },
+  { label: "Violet", value: "text-violet-500" },
+  { label: "Purple", value: "text-purple-500" },
+  { label: "Fuchsia", value: "text-fuchsia-500" },
+  { label: "Pink", value: "text-pink-500" },
+  { label: "Rose", value: "text-rose-500" },
+];
+export function PropertiesEditController({
   activeElement,
 }: TypographyEditControllerProps) {
   const {
     setTextAlign,
     setFontWeight,
     setFontSize,
+    setFontColor,
     currentWeight,
     currentAlign,
     currentFontSize,
+    currentFontColor,
     showTextAlignControls,
     updateTypography,
   } = useTypography(activeElement);
@@ -70,6 +110,7 @@ export function TypographyEditController({
   return (
     // const {typographySettings, setTypographySettings} = useTypographySettings();
     <div className="flex items-center gap-2">
+      <Label>Font size</Label>
       <Select value={currentFontSize} onValueChange={(v) => setFontSize(v)}>
         <SelectTrigger className="w-[160px]">
           <SelectValue placeholder="Font Size" />
@@ -87,6 +128,7 @@ export function TypographyEditController({
           </SelectGroup>
         </SelectContent>
       </Select>
+      <Label>Font weight</Label>
       <Select
         value={currentWeight ?? undefined}
         onValueChange={(v) => setFontWeight(v)}
@@ -162,18 +204,20 @@ export function TypographyEditController({
           </ToggleGroupItem>
         </ToggleGroup>
       )}
-      <Select>
+      <Select
+        value={currentFontColor ?? undefined}
+        onValueChange={(v) => setFontColor(v)}
+      >
         <SelectTrigger className="w-[120px]">
           <SelectValue placeholder="Color" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Color</SelectLabel>
-            <SelectItem value="apple">Color 1</SelectItem>
-            <SelectItem value="banana">Color 2</SelectItem>
-            <SelectItem value="blueberry">Color 3</SelectItem>
-            <SelectItem value="grapes">Color 4</SelectItem>
-            <SelectItem value="pineapple">Color 5</SelectItem>
+            {COLORS.map((color) => (
+              <SelectItem key={color.value} value={color.value}>
+                {color.label}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>

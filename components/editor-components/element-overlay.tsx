@@ -1,27 +1,35 @@
 import { useEffect, useState } from "react";
-import { lockedType } from "../types";
 import { useElementTracker } from "@/hooks/use-element-tracker";
+import { lockedType } from "../types";
 
+// ElementOverlay renders overlays for the live selected element
+// and the locked selected element in editable mode
 export function ElementOverlay({
   editableMode,
   setActiveElement,
   userAppAreaRef,
-  locked,
+  lockedBoundingClients,
 }: {
   editableMode: boolean;
   setActiveElement: (el: HTMLElement | null) => void;
   userAppAreaRef: React.RefObject<HTMLDivElement | null>;
-  locked: lockedType | null;
+  lockedBoundingClients: lockedType | null;
 }) {
   const [rect, setRect] = useState<DOMRect | null>(null);
+
   const { liveSelected } = useElementTracker(
     userAppAreaRef,
     editableMode,
     setActiveElement
   );
+
   useEffect(() => {
     if (!liveSelected) return;
-    const update = () => setRect(liveSelected.getBoundingClientRect());
+    const update = () => {
+      requestAnimationFrame(() => {
+        setRect(liveSelected.getBoundingClientRect());
+      });
+    };
     update();
 
     // Update overlay position on resize or scroll
@@ -33,23 +41,21 @@ export function ElementOverlay({
     };
   }, [liveSelected]);
 
-  //   const rect = liveSelected?.getBoundingClientRect();
-
   if (!rect) return null;
 
-  const lockedOverlay = locked ? (
+  const lockedOverlay = lockedBoundingClients ? (
     <div
       data-dev-overlay
       className="fixed border border-sky-400 pointer-events-none select-none z-2000"
       style={{
-        top: locked.top - window.scrollY,
-        left: locked.left - window.scrollX,
-        width: locked.width,
-        height: locked.height,
+        top: lockedBoundingClients.top - window.scrollY,
+        left: lockedBoundingClients.left - window.scrollX,
+        width: lockedBoundingClients.width,
+        height: lockedBoundingClients.height,
       }}
     >
       <span className="absolute -top-5 left-0 bg-sky-100 text-sky-600 px-1 rounded text-xs">
-        {locked.tagName}
+        {lockedBoundingClients.tagName}
       </span>
     </div>
   ) : null;
