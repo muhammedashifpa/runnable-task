@@ -26,8 +26,11 @@ export async function GET(
 }
 
 // PUT /api/component/:id → update JSX
-export async function PUT(req: Request, { params }: Params) {
-  const { id } = await params;
+export async function PUT(
+  req: NextRequest,
+  context: { params: { id: string } | Promise<{ id: string }> }
+) {
+  const { id } = await context.params;
   const { code } = await req.json();
 
   if (!code || typeof code !== "string") {
