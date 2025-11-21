@@ -1,12 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 // import { getComponent, updateComponent } from "@/lib/db";
 import { readFile, writeFile } from "fs/promises";
 import path from "path";
 type Params = { params: { id: string } };
 
 // GET /api/component/:id → fetch JSX
-export async function GET(req: Request, { params }: Params) {
-  const { id } = await params;
+export async function GET(
+  req: NextRequest,
+  context: { params: { id: string } | Promise<{ id: string }> }
+) {
+  const { id } = await context.params;
+  console.log("Fetching component with id:", context);
 
   try {
     const filePath = path.join(process.cwd(), "data", `${id}.txt`);
