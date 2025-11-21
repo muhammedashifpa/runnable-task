@@ -1,10 +1,19 @@
 "use client";
 
 import { ElementType, getElementType } from "@/lib/editor/elements";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { lockedType } from "../types";
+import { serializeRootToString } from "@/lib/editor/serializeDomToString";
+import { compileJsxToComponent } from "@/lib/editor/serializeStringToJsx";
 
 interface EditorContextType {
+  Component: React.ComponentType | "loading" | "error";
   editableMode: boolean;
   activeElement: HTMLElement | null;
   elementType: ElementType;
@@ -12,17 +21,24 @@ interface EditorContextType {
   toggleEditableMode: () => void;
   setActiveElement: (element: HTMLElement | null) => void;
   updateBoundingClients: () => void;
+  saveComponent: () => void;
+  userAppAreaRef: React.RefObject<HTMLDivElement | null>;
 }
 
 const EditorContext = createContext<EditorContextType | null>(null);
 
 export function EditorProvider({ children }: { children: React.ReactNode }) {
+  const [Component, setComponent] =
+    useState<EditorContextType["Component"]>("loading");
+  const [componentId, setComponentId] = useState<string>("hero");
   const [editableMode, setEditableMode] = useState(true);
 
   const [activeElement, setActiveElement] = useState<HTMLElement | null>(null);
   const [elementType, setElementType] = useState<ElementType>("unknown");
   const [lockedBoundingClients, setLockedBoundingClients] =
     useState<lockedType | null>(null);
+
+  const userAppAreaRef = useRef<HTMLDivElement>(null);
 
   const resetProvider = () => {
     setActiveElement(null);
@@ -47,6 +63,23 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
       });
     }
   };
+  const saveComponent = async () => {
+    if (!userAppAreaRef.current) return;
+    const appArea = userAppAreaRef.current;
+    const serialized = serializeRootToString(appArea);
+    const res = await fetch(`/api/component/${componentId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ code: serialized }),
+    });
+    if (!res.ok) {
+      throw new Error("Failed to update component");
+    }
+    const data = await res.json();
+    return data;
+  };
 
   useEffect(() => {
     // Update element type and bounding clients when active element changes
@@ -60,16 +93,65 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
     updateElTypeAndBoudingClients();
   }, [activeElement]);
 
+  useEffect(() => {
+    async function load() {
+      try {
+        setComponent("loading");
+
+        const res = await fetch(`/api/component/hero`);
+
+        if (!res.ok) {
+          console.error("Fetch failed:", res.status);
+          setComponent("error");
+          return;
+        }
+
+        const data = await res.json();
+
+        if (!data?.code || typeof data.code !== "string") {
+          console.error("Invalid or missing code");
+          setComponent("error");
+          return;
+        }
+
+        let Comp;
+
+        try {
+          Comp = compileJsxToComponent(data.code);
+        } catch (err) {
+          console.error("JSX compile error:", err);
+          setComponent("error");
+          return;
+        }
+
+        if (typeof Comp !== "function") {
+          console.error("Compiled output is not a component");
+          setComponent("error");
+          return;
+        }
+        setComponentId(data.id);
+        setComponent(() => Comp);
+      } catch (err) {
+        console.error("Unexpected error:", err);
+        setComponent("error");
+      }
+    }
+
+    load();
+  }, []);
   return (
     <EditorContext.Provider
       value={{
+        Component,
         editableMode,
         activeElement,
         elementType,
         lockedBoundingClients,
+        userAppAreaRef,
         setActiveElement,
         toggleEditableMode,
         updateBoundingClients,
+        saveComponent,
       }}
     >
       {children}

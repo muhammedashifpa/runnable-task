@@ -33,10 +33,10 @@ export default function Example() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base font-semibold text-indigo-500">
-            Deploy faster
+            🪄 Start Editing
           </h2>
           <p className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 ">
-            Everything you need to deploy your app
+            Click any part of your component to begin customizing it.
           </p>
           <p className="mt-6 text-lg text-gray-700">
             Quis tellus eget adipiscing convallis sit sit eget aliquet quis.

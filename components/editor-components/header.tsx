@@ -1,5 +1,4 @@
 "use client";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Undo2, Redo2, Save } from "lucide-react";
 import { PropertiesEditController } from "@/components/editor-components/properties-edit-controller";
@@ -8,9 +7,11 @@ import { EditModeToggle } from "@/components/editor-components/edit-mode-toggle"
 import { useEditor } from "./editor-provider";
 
 export default function Header() {
-  const { activeElement, editableMode, elementType } = useEditor();
+  const { activeElement, editableMode, elementType, saveComponent } =
+    useEditor();
   const mountPropertiesController =
     editableMode && activeElement && elementType === "text";
+
   return (
     <header className="flex h-16 shrink-0 items-center bg-white sticky top-0 justify-between gap-2 border-b px-4">
       <div className="flex items-center relative">
@@ -26,7 +27,12 @@ export default function Header() {
         <Button variant="ghost" size="icon" aria-label="Submit" disabled>
           <Redo2 />
         </Button>
-        <Button className="ml-2" size="sm" aria-label="Submit" disabled>
+        <Button
+          className="ml-2"
+          size="sm"
+          aria-label="Submit"
+          onClick={saveComponent}
+        >
           Save
           <Save />
         </Button>

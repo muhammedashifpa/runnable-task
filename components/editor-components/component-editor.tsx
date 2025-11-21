@@ -1,21 +1,27 @@
 "use client";
-import { useRef } from "react";
+import { useEffect } from "react";
 import { ElementOverlay } from "./element-overlay";
 import { useEditor } from "./editor-provider";
+
 // EditorPreview wraps the user application area
 // and conditionally renders the ElementOverlay in editable mode
-// Place Selected element overlay
+// and Place Selected element overlay
 export default function EditorPreview({
-  children,
+  component,
 }: {
-  children: React.ReactNode;
+  component: React.ReactNode;
 }) {
-  const { editableMode, setActiveElement, lockedBoundingClients } = useEditor();
-  const userAppAreaRef = useRef<HTMLDivElement>(null);
-
+  const {
+    editableMode,
+    setActiveElement,
+    lockedBoundingClients,
+    userAppAreaRef,
+  } = useEditor();
   return (
-    <div ref={userAppAreaRef}>
-      {children}
+    <>
+      <div className="[&_*]:cursor-crosshair" ref={userAppAreaRef}>
+        {component}
+      </div>
       {editableMode && (
         <ElementOverlay
           setActiveElement={setActiveElement}
@@ -24,6 +30,6 @@ export default function EditorPreview({
           lockedBoundingClients={lockedBoundingClients}
         />
       )}
-    </div>
+    </>
   );
 }
