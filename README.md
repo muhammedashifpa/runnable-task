@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">⚡ Runnable Task — Visual Component Editor ⚡</h1>
+  <h1 align="center">⚡ Visual Component Editor ⚡</h1>
 
   <p align="center">
     A real-time, inline UI editor built with Next.js, React 19, Tailwind, and shadcn/ui.
@@ -19,38 +19,9 @@
     <img src="https://img.shields.io/github/languages/top/muhammedashifpa/runable-task?style=flat-square" />
   </p>
 </p>
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-  <p align="center">
-    A real-time, inline UI editor built with Next.js, React 19, Tailwind, and shadcn/ui.
-  </p>
-
-  <p align="center">
-    <img src="https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=nextdotjs" />
-    <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react" />
-    <img src="https://img.shields.io/badge/TailwindCSS-4.0-38BDF8?style=for-the-badge&logo=tailwindcss" />
-    <img src="https://img.shields.io/badge/shadcn-ui-000?style=for-the-badge" />
-    <img src="https://img.shields.io/badge/Babel-standalone-F9DC3E?style=for-the-badge&logo=babel" />
-  </p>
-
-  <p align="center">
-    <img src="https://img.shields.io/github/license/muhammedashifpa/runable-task?style=flat-square" />
-    <img src="https://img.shields.io/github/last-commit/muhammedashifpa/runable-task?style=flat-square" />
-    <img src="https://img.shields.io/github/languages/top/muhammedashifpa/runable-task?style=flat-square" />
-  </p>
-</p>
-Here is a clean, professional README.md for your project Runnable Task – Visual Component Editor based on everything you’ve built so far (component loading, JSX serialization, live editing, saving, resetting, toolbar, error handling, etc.).
-
-You can copy-paste directly into README.md.
-
-⸻
-
-🚀 Runnable Task — Visual Component Editor
 
 A Next.js–powered visual component editor that lets users click, edit, and save UI components in real time.
 The editor converts DOM → JSX, compiles JSX back into React components, and syncs updates to the backend.
-
-Perfect for quick UI prototyping, inline content editing, and component-level customization.
 
 ⸻
 
@@ -150,19 +121,19 @@ hero.original.txt
 
 1. Load Component
 
-GET /api/component/:id
+````GET /api/component/:id
 
 Loads the component’s .txt file → compiles → mounts into editor.
 
 2. Save Component
 
-PUT /api/component/:id
+```PUT /api/component/:id
 
 Frontend serializes DOM → JSX → sends to backend.
 
 3. Reset Component
 
-POST /api/component/reset/:id
+```POST /api/component/reset/:id
 
 Copies id.original.txt → id.txt and returns fresh JSX.
 
@@ -187,15 +158,15 @@ The EditorContext exposes:
 
 Install dependencies
 
-pnpm install
+```pnpm install
 
 Run dev server
 
-pnpm dev
+```pnpm dev
 
 Build for production
 
-pnpm build
+```pnpm build
 
 ⸻
 
@@ -203,7 +174,7 @@ pnpm build
 
 Restore a component:
 
-curl -X POST http://localhost:3000/api/component/reset/hero
+```curl -X POST http://localhost:3000/api/component/reset/hero
 
 ⸻
 
@@ -216,3 +187,4 @@ curl -X POST http://localhost:3000/api/component/reset/hero
 • Reusable style presets
 
 ⸻
+````
