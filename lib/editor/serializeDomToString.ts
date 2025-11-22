@@ -1,4 +1,3 @@
-// utils/serializeDomToJsx.ts
 const EDITOR_SKIP_CLASSES = [
   "editor-overlay",
   "editor-selection-box",
@@ -115,6 +114,14 @@ export function serializeRootToString(wrapper: HTMLElement) {
   if (!componentRoot) {
     throw new Error("Component root not found in editor wrapper");
   }
-
-  return serializeElementToJsx(componentRoot, 2, 0);
+  const wrappedJsx = `
+    function Component() {
+      return (
+        <>
+          ${serializeElementToJsx(componentRoot, 2, 0)}
+        </>
+      );
+    }
+  `;
+  return wrappedJsx;
 }

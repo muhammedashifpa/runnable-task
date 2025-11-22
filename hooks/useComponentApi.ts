@@ -1,8 +1,10 @@
+//Hooks to interact with component API
 export function useComponentApi(componentId: string) {
+  //get jsx component from server
   async function loadComponent(): Promise<Response> {
     return fetch(`/api/component/${componentId}`);
   }
-
+  //save jsx component to server
   async function saveComponent(code: string): Promise<Response> {
     return fetch(`/api/component/${componentId}`, {
       method: "PUT",
@@ -10,7 +12,7 @@ export function useComponentApi(componentId: string) {
       headers: { "Content-Type": "application/json" },
     });
   }
-
+  //reset component to original component on server
   async function resetComponent(): Promise<Response> {
     return fetch(`/api/component/reset/${componentId}`, {
       method: "POST",

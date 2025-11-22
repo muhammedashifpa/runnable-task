@@ -1,6 +1,6 @@
 "use client";
 
-import { ElementType, getElementType } from "@/lib/editor/elements";
+import { ElementType, getElementType } from "@/lib/editor/utils";
 import React, {
   createContext,
   useCallback,
@@ -133,6 +133,7 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
           error: "Failed to serialize component",
           success: false,
         }));
+        console.error("Serialization error:", err);
         toast.error("Failed to serialize component");
         return;
       }
@@ -142,6 +143,7 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
       try {
         res = await saveComponent(serialized);
       } catch (networkError) {
+        console.error("Network error while saving:", networkError);
         setSaveState((s) => ({
           ...s,
           saving: false,
@@ -179,6 +181,7 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
       try {
         data = await res.json();
       } catch (jsonErr) {
+        console.error("Failed to parse save response:", jsonErr);
         setSaveState((s) => ({
           ...s,
           saving: false,

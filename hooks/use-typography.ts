@@ -1,24 +1,12 @@
 import { useEditor } from "@/components/editor-components/editor-provider";
-import React, { useState, useEffect, useMemo } from "react";
-const TYPO_CLASSES = {
-  fontSize: /^text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)$/,
-  fontWeight:
-    /^font-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)$/,
-  tracking: /^tracking-(tighter|tight|normal|wide|wider|widest)$/,
-  leading: /^leading-(none|tight|snug|normal|relaxed|loose|\d+)$/,
-  textAlign: /^text-(left|center|right|justify)$/,
-  textDecoration: /^(underline|line-through|overline|no-underline)$/,
-  fontStyle: /^(italic|not-italic)$/,
-  color:
-    /^text-(?:[a-z]+(?:-[a-z]+)?-\d{1,3}|black|white|transparent|current)(?:\/\d{1,3})?$/,
-};
+import { TYPO_CLASSES } from "@/lib/editor/utils";
+import { useState, useEffect, useMemo } from "react";
 
 export function useTypography() {
   const [classes, setClasses] = useState<string[]>([]);
   const [textClasses, setTextClasses] = useState<string[]>([]);
   const {
     updateBoundingClients,
-    elementType,
     activeElement: el,
     setSaveState,
   } = useEditor();
@@ -28,20 +16,27 @@ export function useTypography() {
     if (!el) return;
 
     const processClasses = () => {
-      const all = el.className
+      const rawClass =
+        typeof el.className === "string"
+          ? el.className
+          : (el as unknown as SVGElement).className?.baseVal || "";
+
+      const all = rawClass
         .split(" ")
-        .map((c) => c.trim())
+        .map((c: string) => c.trim())
         .filter(Boolean);
 
       setClasses(all);
 
       // Filter only typography classes
-      const onlyTypography = all.filter((cls) =>
+      const onlyTypography = all.filter((cls: string) =>
         Object.values(TYPO_CLASSES).some((regex) => regex.test(cls))
       );
 
       // Sort alphabetically for stable UI
-      const sorted = onlyTypography.sort((a, b) => a.localeCompare(b));
+      const sorted: string[] = onlyTypography.sort((a: string, b: string) =>
+        a.localeCompare(b)
+      );
       setTextClasses(sorted);
     };
     processClasses();
@@ -82,49 +77,43 @@ export function useTypography() {
       textClasses.find((cls) => cls.match(TYPO_CLASSES.fontWeight)) ||
       "font-normal"
     );
-  }, [el, textClasses]);
+  }, [textClasses]);
 
   const currentAlign = useMemo(() => {
     return (
       textClasses.find((cls) => cls.match(TYPO_CLASSES.textAlign)) ||
       "text-left"
     );
-  }, [el, textClasses]);
+  }, [textClasses]);
 
   const currentFontSize = useMemo(() => {
     return (
       textClasses.find((cls) => cls.match(TYPO_CLASSES.fontSize)) || "text-base"
     );
-  }, [el, textClasses]);
+  }, [textClasses]);
 
   const currentFontColor = useMemo(() => {
     return (
       textClasses.find((cls) => cls.match(TYPO_CLASSES.color)) || "text-inherit"
     );
-  }, [el, textClasses]);
+  }, [textClasses]);
 
-  const showTextAlignControls = React.useMemo(() => {
-    if (!el || !el.parentElement || elementType === "text") return true;
-
-    const parent = el.parentElement;
-    const parentClasses = parent.className.split(" ");
-
-    const isFlexParent = parentClasses.some((cls) =>
-      /^(flex|inline-flex)$/.test(cls)
+  const currentTextDecoration = useMemo(() => {
+    return (
+      textClasses.find((cls) => cls.match(TYPO_CLASSES.textDecoration)) ||
+      "no-underline"
     );
-
-    return !isFlexParent; // hide when flex
-  }, [el]);
+  }, [textClasses]);
 
   return {
     classes,
     textClasses,
-    showTextAlignControls,
     // Current values
     currentWeight,
     currentAlign,
     currentFontSize,
     currentFontColor,
+    currentTextDecoration,
     // Setters
     setFontSize: (size: string) => updateTypography("fontSize", size),
     setFontWeight: (weight: string) => updateTypography("fontWeight", weight),
@@ -133,7 +122,7 @@ export function useTypography() {
     setTextAlign: (align: string) => updateTypography("textAlign", align),
     setFontColor: (color: string) => updateTypography("color", color),
 
-    // Raw update in case you add custom rules later
+    // Raw update
     updateTypography,
   };
 }

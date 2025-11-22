@@ -7,7 +7,7 @@ export default function Page() {
   return (
     <EditorProvider>
       <Header />
-      <ComponentEditor component={<UserComponentLoader />} />
+      <ComponentEditor userComponent={<UserComponentLoader />} />
     </EditorProvider>
   );
 }

@@ -6,17 +6,17 @@ import { useEditor } from "./editor-provider";
 // and conditionally renders the ElementOverlay in editable mode
 // and Place Selected element overlay
 export default function EditorPreview({
-  component,
+  userComponent,
 }: {
-  component: React.ReactNode;
+  userComponent: React.ReactNode;
 }) {
   const {
+    Component,
     editableMode,
-    setActiveElement,
+    isResetting,
     lockedBoundingClients,
     userAppAreaRef,
-    isResetting,
-    Component,
+    setActiveElement,
   } = useEditor();
   const mountOverlay =
     editableMode &&
@@ -30,7 +30,7 @@ export default function EditorPreview({
         className={mountOverlay ? "**:cursor-crosshair" : undefined}
         ref={userAppAreaRef}
       >
-        {component}
+        {userComponent}
       </div>
       {mountOverlay && (
         <ElementOverlay

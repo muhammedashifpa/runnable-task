@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import {
   Save,
   Loader2,
@@ -8,6 +7,7 @@ import {
   AlertCircleIcon,
   SquareDashedMousePointer,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { PropertiesEditController } from "@/components/editor-components/properties-edit-controller";
 import { EditModeToggle } from "@/components/editor-components/edit-mode-toggle";
 
@@ -28,11 +28,12 @@ export default function Header() {
     editableMode && activeElement && elementType === "text";
   const mountAlert = activeElement && elementType !== "text";
   return (
-    <header className="flex h-16 shrink-0 items-center bg-white sticky top-0 justify-between gap-2 border-b px-4">
+    <header className="flex h-16 shrink-0 items-center bg-white sticky top-0 justify-between gap-2 border-b px-4 z-3000">
       <div className="flex items-center relative">
         <EditModeToggle />
       </div>
       <div>
+        {/* Alerts in header for non-text elements , preview mode and selection */}
         {mountAlert && (
           <Alert variant="default">
             <AlertCircleIcon />
@@ -54,6 +55,7 @@ export default function Header() {
           </Alert>
         )}
       </div>
+      {/* Text properties controller */}
       {mountPropertiesController && (
         <PropertiesEditController activeElement={activeElement} />
       )}

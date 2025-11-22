@@ -23,75 +23,15 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useTypography } from "@/hooks/use-typography";
 import { Toggle } from "../ui/toggle";
 import { Label } from "../ui/label";
+import {
+  COLORS,
+  FONT_SIZE_OPTIONS,
+  FONT_WEIGHT_OPTIONS,
+} from "@/lib/editor/utils";
 interface TypographyEditControllerProps {
   activeElement: HTMLElement | null;
 }
 
-export const FONT_WEIGHT_OPTIONS: { label: string; value: string }[] = [
-  { label: "Thin", value: "font-thin" },
-  { label: "Extra Light", value: "font-extralight" },
-  { label: "Light", value: "font-light" },
-  { label: "Normal", value: "font-normal" },
-  { label: "Medium", value: "font-medium" },
-  { label: "Semi Bold", value: "font-semibold" },
-  { label: "Bold", value: "font-bold" },
-  { label: "Extra Bold", value: "font-extrabold" },
-  { label: "Black", value: "font-black" },
-];
-
-export const FONT_SIZE_OPTIONS: { label: string; value: string }[] = [
-  { label: "Xs", value: "text-xs" },
-  { label: "Sm", value: "text-sm" },
-  { label: "Base", value: "text-base" },
-  { label: "Lg", value: "text-lg" },
-  { label: "Xl", value: "text-xl" },
-  { label: "2xl", value: "text-2xl" },
-  { label: "3xl", value: "text-3xl" },
-  { label: "4xl", value: "text-4xl" },
-  { label: "5xl", value: "text-5xl" },
-  { label: "6xl", value: "text-6xl" },
-  { label: "7xl", value: "text-7xl" },
-  { label: "8xl", value: "text-8xl" },
-  { label: "9xl", value: "text-9xl" },
-];
-
-const COLORS: { label: string; value: string }[] = [
-  { label: "Default", value: "text-inherit" },
-  { label: "Black", value: "text-black" },
-  { label: "White", value: "text-white" },
-
-  { label: "Slate", value: "text-slate-500" },
-  { label: "Gray", value: "text-gray-500" },
-  { label: "Gray 600", value: "text-gray-600" },
-  { label: "Gray 700", value: "text-gray-700" },
-  { label: "Gray 800", value: "text-gray-800" },
-  { label: "Gray 900", value: "text-gray-900" },
-
-  { label: "Zinc", value: "text-zinc-500" },
-  { label: "Neutral", value: "text-neutral-500" },
-  { label: "Stone", value: "text-stone-500" },
-
-  { label: "Red", value: "text-red-500" },
-  { label: "Orange", value: "text-orange-500" },
-  { label: "Amber", value: "text-amber-500" },
-  { label: "Yellow", value: "text-yellow-500" },
-
-  { label: "Lime", value: "text-lime-500" },
-  { label: "Green", value: "text-green-500" },
-  { label: "Emerald", value: "text-emerald-500" },
-
-  { label: "Teal", value: "text-teal-500" },
-  { label: "Cyan", value: "text-cyan-500" },
-  { label: "Sky", value: "text-sky-500" },
-
-  { label: "Blue", value: "text-blue-500" },
-  { label: "Indigo", value: "text-indigo-500" },
-  { label: "Violet", value: "text-violet-500" },
-  { label: "Purple", value: "text-purple-500" },
-  { label: "Fuchsia", value: "text-fuchsia-500" },
-  { label: "Pink", value: "text-pink-500" },
-  { label: "Rose", value: "text-rose-500" },
-];
 export function PropertiesEditController({
   activeElement,
 }: TypographyEditControllerProps) {
@@ -104,7 +44,7 @@ export function PropertiesEditController({
     currentAlign,
     currentFontSize,
     currentFontColor,
-    showTextAlignControls,
+    currentTextDecoration,
     updateTypography,
   } = useTypography();
 
@@ -164,6 +104,7 @@ export function PropertiesEditController({
       <ToggleGroup
         type="single"
         variant="outline"
+        value={currentTextDecoration || undefined}
         onValueChange={(value) => updateTypography("textDecoration", value)}
       >
         <ToggleGroupItem value="line-through" aria-label="Toggle line through">
@@ -177,30 +118,29 @@ export function PropertiesEditController({
         </ToggleGroupItem>
       </ToggleGroup>
       {/*  Text align */}
-      {showTextAlignControls && (
-        <ToggleGroup
-          type="single"
-          variant="outline"
-          value={currentAlign || undefined}
-          onValueChange={(value) => setTextAlign(value)}
-        >
-          <ToggleGroupItem value="text-left" aria-label="Align left">
-            <TextAlignStart className="h-4 w-4" />
-          </ToggleGroupItem>
+      <ToggleGroup
+        type="single"
+        variant="outline"
+        value={currentAlign || undefined}
+        onValueChange={(value) => setTextAlign(value)}
+      >
+        <ToggleGroupItem value="text-left" aria-label="Align left">
+          <TextAlignStart className="h-4 w-4" />
+        </ToggleGroupItem>
 
-          <ToggleGroupItem value="text-center" aria-label="Align center">
-            <TextAlignCenter className="h-4 w-4" />
-          </ToggleGroupItem>
+        <ToggleGroupItem value="text-center" aria-label="Align center">
+          <TextAlignCenter className="h-4 w-4" />
+        </ToggleGroupItem>
 
-          <ToggleGroupItem value="text-right" aria-label="Align right">
-            <TextAlignEnd className="h-4 w-4" />
-          </ToggleGroupItem>
+        <ToggleGroupItem value="text-right" aria-label="Align right">
+          <TextAlignEnd className="h-4 w-4" />
+        </ToggleGroupItem>
 
-          <ToggleGroupItem value="text-justify" aria-label="Align justify">
-            <TextAlignJustify className="h-4 w-4" />
-          </ToggleGroupItem>
-        </ToggleGroup>
-      )}
+        <ToggleGroupItem value="text-justify" aria-label="Align justify">
+          <TextAlignJustify className="h-4 w-4" />
+        </ToggleGroupItem>
+      </ToggleGroup>
+      <Label>Font color</Label>
       <Select
         value={currentFontColor ?? undefined}
         onValueChange={(v) => setFontColor(v)}

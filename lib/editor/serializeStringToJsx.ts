@@ -1,17 +1,7 @@
 import * as Babel from "@babel/standalone";
 import React from "react";
 
-export function compileJsxToComponent(rawJsx: string) {
-  const jsx = `
-    function Component() {
-      return (
-        <>
-          ${rawJsx}
-        </>
-      );
-    }
-  `;
-
+export function compileJsxToComponent(jsx: string) {
   const compiled = Babel.transform(jsx, {
     presets: ["react"],
   }).code;
