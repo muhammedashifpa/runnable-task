@@ -131,9 +131,7 @@ serializeDomToString.ts # DOM → JSX
 serializeStringToJsx.ts # JSX → Component
 utils.ts # Element type detection
 redis.ts # Redis client
-utils.ts # Utility functions
-
-```
+utils.ts # Utility functions```
 
 <h2>⚙️ How It Works</h2>
 
@@ -163,7 +161,7 @@ Frontend serializes DOM → JSX → sends to backend.
 
 POST /api/component/reset/:id
 
-````
+```
 
 Restores original version from Redis backup → returns fresh JSX.
 
@@ -198,7 +196,7 @@ Create a `.env.local` file in the root directory:
 ```env
 UPSTASH_REDIS_REST_URL=your_redis_url
 UPSTASH_REDIS_REST_TOKEN=your_redis_token
-````
+```
 
 Get your credentials from [Upstash Console](https://console.upstash.com/).
 
