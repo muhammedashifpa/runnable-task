@@ -96,42 +96,46 @@ Fallback modes: "loading" and "error" ensure graceful UI states.
 ⸻
 
 <h2>📁 Project Structure</h2>
-```bash
-/app
-  /api
-    /component/[id]
-      route.ts          # GET, PUT endpoints
-    /component/reset/[id]
-      route.ts          # POST reset endpoint
-  layout.tsx            # Root layout
-  page.tsx              # Main editor page
-  globals.css           # Global styles
-
-/components
-/editor-components
-component-editor.tsx
-editor-provider.tsx
-element-overlay.tsx
-header.tsx
-properties-edit-controller.tsx
-edit-mode-toggle.tsx
-/user-components
-hero.tsx
-user-components-loader.tsx
-/ui # shadcn/ui components
-
-/hooks
-use-element-tracker.ts
-use-typography.ts
-useComponentApi.ts
-
-/lib
-/editor
-serializeDomToString.ts # DOM → JSX
-serializeStringToJsx.ts # JSX → Component
-utils.ts # Element type detection
-redis.ts # Redis client
-utils.ts # Utility functions```
+```
+runnable-task/
+├── app/
+│   ├── api/
+│   │   └── component/
+│   │       ├── [id]/
+│   │       │   └── route.ts          # GET, PUT endpoints
+│   │       └── reset/
+│   │           └── [id]/
+│   │               └── route.ts      # POST reset endpoint
+│   ├── layout.tsx                     # Root layout
+│   ├── page.tsx                       # Main editor page
+│   └── globals.css                    # Global styles
+│
+├── components/
+│   ├── editor-components/
+│   │   ├── component-editor.tsx
+│   │   ├── editor-provider.tsx
+│   │   ├── element-overlay.tsx
+│   │   ├── header.tsx
+│   │   ├── properties-edit-controller.tsx
+│   │   └── edit-mode-toggle.tsx
+│   ├── user-components/
+│   │   └── hero.tsx
+│   ├── user-components-loader.tsx
+│   └── ui/                            # shadcn/ui components
+│
+├── hooks/
+│   ├── use-element-tracker.ts
+│   ├── use-typography.ts
+│   └── useComponentApi.ts
+│
+└── lib/
+    ├── editor/
+    │   ├── serializeDomToString.ts    # DOM → JSX
+    │   ├── serializeStringToJsx.ts     # JSX → Component
+    │   └── utils.ts                   # Element type detection
+    ├── redis.ts                       # Redis client
+    └── utils.ts                       # Utility functions
+```
 
 <h2>⚙️ How It Works</h2>
 
