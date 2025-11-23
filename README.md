@@ -29,54 +29,61 @@ The editor converts DOM → JSX, compiles JSX back into React components, and sy
 <h2>🎯 Features</h2>
 
 <h3>✨ 1. Live Component Editing</h3>
-• Double-click any text element to edit inline
-• Click any element to inspect and style
-• Automatic detection of element type
-• Sandbox-style editing mode with real-time updates
+
+- Double-click any text element to edit inline
+- Click any element to inspect and style
+- Automatic detection of element type
+- Sandbox-style editing mode with real-time updates
 
 <h3>✨ 2. Smart Serialization</h3>
-• Takes live HTML DOM
-• Serializes into clean JSX
-• Compiles JSX back into a React component (safe + validated)
-• Maintains classNames, text nodes, and structure
+
+- Takes live HTML DOM
+- Serializes into clean JSX
+- Compiles JSX back into a React component (safe + validated)
+- Maintains classNames, text nodes, and structure
 
 <h3>✨ 3. Toolbar Controls</h3>
 
 Use the built-in toolbar to style your text:
-• Font size
-• Font weight
-• Italic
-• Text decoration
-• Alignment
-• Color
+
+- Font size
+- Font weight
+- Italic
+- Text decoration
+- Alignment
+- Color
 
 Everything updates immediately in the preview.
 
 <h3>✨ 4. Component Lifecycle Actions</h3>
 
 <h2>💾 Save Component</h2>
-• Serializes the edited UI
-• Sends PUT request to /api/component/[id]
-• Shows loading, success toast, and error toast
-• Tracks dirty state and disables Save unless changed
+
+- Serializes the edited UI
+- Sends PUT request to /api/component/[id]
+- Shows loading, success toast, and error toast
+- Tracks dirty state and disables Save unless changed
 
 <h2>🔄 Reset to Original</h2>
-• Restores the original version using /api/component/reset/[id]
-• Recompiles JSX and refreshes editor state
-• Use this to “undo everything”
+
+- Restores the original version using /api/component/reset/[id]
+- Recompiles JSX and refreshes editor state
+- Use this to “undo everything”
 
 <h2>👁 Preview Mode</h2>
-• Disables editing mode
-• Switch between Edit ↔ Preview instantly
+
+- Disables editing mode
+- Switch between Edit ↔ Preview instantly
 
 <h3>✨ 5. Error-Resilient Architecture</h3>
 
 The editor handles:
-• Invalid JSX
-• Missing component files
-• Network failures
-• Serialization errors
-• Unexpected runtime crashes
+
+- Invalid JSX
+- Missing component files
+- Network failures
+- Serialization errors
+- Unexpected runtime crashes
 
 Fallback modes: "loading" and "error" ensure graceful UI states.
 
@@ -175,15 +182,15 @@ Restores original version from Redis backup → returns fresh JSX.
 <h2>🧩 Editor Context Capabilities</h2>
 
 <h3>The EditorContext exposes:</h3>
-• Component — current rendered component or "loading" | "error"
-• editableMode
-• saveState → { dirty, saving, error, success }
-• resetToOriginalComponent()
-• saveComponentHandler()
-• activeElement + elementType
-• lockedBoundingClients
-• userAppAreaRef
-• toggleEditableMode()
+- Component — current rendered component or "loading" | "error"
+- editableMode
+- saveState → { dirty, saving, error, success }
+- resetToOriginalComponent()
+- saveComponentHandler()
+- activeElement + elementType
+- lockedBoundingClients
+- userAppAreaRef
+- toggleEditableMode()
 
 ⸻
 
@@ -240,11 +247,13 @@ For complete API documentation and testing examples, see [API.md](./API.md).
 <h3>Quick Examples</h3>
 
 <h4>Fetch a component:</h4>
+
 ```bash
 curl http://localhost:3000/api/component/hero
 ```
 
 <h4>Update a component:</h4>
+
 ```bash
 curl -X PUT http://localhost:3000/api/component/hero \
   -H "Content-Type: application/json" \
@@ -252,6 +261,7 @@ curl -X PUT http://localhost:3000/api/component/hero \
 ```
 
 <h4>Reset a component:</h4>
+
 ```bash
 curl -X POST http://localhost:3000/api/component/reset/hero
 ```
@@ -262,4 +272,3 @@ curl -X POST http://localhost:3000/api/component/reset/hero
 
 • [Architecture Overview](./ARCHITECTURE.md) - Detailed system architecture and design patterns
 • [API Documentation](./API.md) - Complete API reference and testing guide
-• [Issues & Improvements](./ISSUES_AND_IMPROVEMENTS.md) - Known issues and improvement suggestions
